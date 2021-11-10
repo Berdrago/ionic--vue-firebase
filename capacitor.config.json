@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "ionic--vue-firebase",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
