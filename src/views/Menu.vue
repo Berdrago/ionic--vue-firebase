@@ -24,25 +24,50 @@
        </ion-list>
       </ion-content>
     </ion-menu>
-    <ion-router-outlet id="main"></ion-router-outlet>
-    <ion-content  class="login">
-        <form action  @submit.prevent="login">
-            <ion-item  > 
-                <ion-label position="floating" class="rojo" for="#producto" >Producto</ion-label>
-                <ion-input  v-model="producto" type="string" id="producto" required placeholder="Ingresa Nombre de producto" ></ion-input>
-            </ion-item>
-            <ion-item > 
-                <ion-label position="floating" class="rojo" for="#cproducto"  >Cantidad</ion-label>
-                <ion-input v-model="cproducto" type="number" id="cproducto"  required placeholder="Ingresa la cantidad de productos"></ion-input>
-            </ion-item>
-            <ion-item > 
-                <ion-label position="floating" class="rojo" for="#cateproducto"  >Categoria</ion-label>
-                <ion-input v-model="cateproducto" type="string" id="cateproducto"  required placeholder="Ingresa nombre de la cataegoria"></ion-input>
-            </ion-item>
-            <ion-button  expand="full" fill="outline" class="espacio"  style="margin: 50px" color="danger" type="submit"  > Crear Producto</ion-button>
-        </form>
-        <ion-button  expand="full" fill="outline" class="espacio"  color="danger" type="submit" @click="() => router.push('/lista')" > Lista de Productos</ion-button>
-    </ion-content>
+    <ion-content >
+      <ion-item id="appMoviles" >
+        <ion-item>
+          <ion-button color="success" @click="btnCrear" > <ion-icon :icon="addCircleOutline" size="large" > </ion-icon></ion-button>
+          <h5>Stock Total : <span>{{totalStock}}</span></h5>
+        </ion-item>
+      </ion-item>
+      <ion-item  >
+        <tr>
+          <th> Id : </th>
+        </tr>
+        <tr v-for=" movil in moviles " :key="movil">  
+          <td>{{movil.id}}</td>
+        </tr>
+      </ion-item>
+      <ion-item  >
+        <tr>
+          <th> Provedor : </th>
+        </tr>
+        <tr v-for=" movil in moviles " :key="movil">  
+          <td>{{movil.provedor}}</td>
+        </tr>
+      </ion-item>
+      <ion-item  >
+        <tr>
+          <th> Categoria: </th>
+        </tr>
+        <tr v-for=" movil in moviles " :key="movil">  
+          <td>{{movil.categoria}}</td>
+        </tr>
+      </ion-item>
+      <ion-item  >
+        <tr>
+          <th> Stock:</th>
+        </tr>
+        <tr >  
+          <td>
+            
+          </td>
+        </tr>
+      </ion-item>
+      <ion-button color="primary" @click="btnActualizar(movil.id, movil.provedor, movil.categoria, movil.stock )" > <ion-icon :icon="syncOutline" size="large" > </ion-icon></ion-button>
+      <ion-button color="danger" @click="btnBorrar(movil.id)"> <ion-icon :icon="closeCircleOutline" size="large" > </ion-icon></ion-button>
+    </ion-content >
   </ion-page>
 </template>
 
@@ -54,18 +79,17 @@ import {
   IonItem, 
   IonList, 
   IonMenu, 
-  IonRouterOutlet,
   IonTitle, 
   IonToolbar,
   menuController,
   IonLabel,
   IonButton,
-  IonInput
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { handRightOutline,reorderThreeOutline} from 'ionicons/icons'
 import { App } from '../App.vue';
 import { useRouter } from 'vue-router';
+import { addCircleOutline,syncOutline, closeCircleOutline } from  'ionicons/icons'
 
 
 
@@ -78,12 +102,12 @@ export default defineComponent({
     IonItem, 
     IonList, 
     IonMenu, 
-    IonRouterOutlet,
     IonTitle, 
     IonToolbar,
     IonLabel,
     IonButton,
-    IonInput
+    
+
   },
   data: () => ({
     producto: "",
@@ -107,7 +131,10 @@ export default defineComponent({
       handRightOutline,
       menuController,
       reorderThreeOutline,
-      router 
+      router,
+      addCircleOutline,
+      syncOutline,
+      closeCircleOutline
     }
     
     
