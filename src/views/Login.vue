@@ -20,7 +20,7 @@
             <ion-label position="floating" class="rojo" for="#password"  >Contraseña</ion-label>
             <ion-input v-model="password" type="password" id="password"  required placeholder="Password"></ion-input>
         </ion-item>
-        <ion-button  expand="full" fill="outline" class="espacio"  style="margin: 50px" color="danger" type="submit" @click="() => router.push('/menu')" > Login</ion-button>
+        <ion-button  expand="full" fill="outline" class="espacio"  style="margin: 50px" color="danger" type="submit" @click="() => router.push('/menu')" > Inicir Sesion</ion-button>
       </form>
       <ion-button  expand="full" fill="outline" class="espacio"  color="danger" @click="() => router.push('/register')"  > CrearCuenta</ion-button>
     </ion-content>

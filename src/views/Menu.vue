@@ -13,60 +13,42 @@
       </ion-header>
       <ion-content >
         <ion-list>
-          <ion-item-sliding  v-for="Catproducto in Catproductos" :key="Catproducto">
+          <ion-item-sliding  >
+            <ion-item>
+              <ion-label color="danger"> Cerrar Sesion </ion-label>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option  @click="CerrarSesion(item)" color="danger"> <ion-icon :icon="powerOutline" size="large" > </ion-icon> </ion-item-option>
+            </ion-item-options> 
+          </ion-item-sliding>
+          <!--<ion-item-sliding  v-for="Catproducto in Catproductos" :key="Catproducto">
             <ion-item>
               <ion-label color="danger">{{Catproducto.name}} </ion-label>
             </ion-item>
             <ion-item-options side="end">
               <ion-item-option @click="unread(item)" color="danger"> <ion-icon :icon="handRightOutline" size="large" > </ion-icon> </ion-item-option>
             </ion-item-options>
-          </ion-item-sliding>
+          </ion-item-sliding>-->
        </ion-list>
       </ion-content>
     </ion-menu>
+    <ion-router-outlet id="main"></ion-router-outlet>
     <ion-content >
-      <ion-item id="appMoviles" >
-        <ion-item>
-          <ion-button color="success" @click="btnCrear" > <ion-icon :icon="addCircleOutline" size="large" > </ion-icon></ion-button>
-          <h5>Stock Total : <span>{{totalStock}}</span></h5>
+      <modal-crear :is-open="modalInfo.show" @modal-closed="handleModalClosed"  />
+      <ion-button color="success" @click="showModal" > <ion-icon :icon="addCircleOutline" size="large" > </ion-icon></ion-button>
+      <!--<ion-button color="primary" @click="btnActualizar()" > <ion-icon :icon="syncOutline" size="large" > </ion-icon></ion-button>-->
+      <!--<ion-button color="danger" @click="btnBorrar()"> <ion-icon :icon="closeCircleOutline" size="large" > </ion-icon></ion-button>-->
+      <pre>{{JSON.stringify(modalInfo, null,2)}}</pre>
+      <ion-list>
+        <ion-item id="Moviles">
+          <ion-label color="danger">Id:</ion-label>
+          <ion-label color="danger">Nombre de Producto: </ion-label>
+          <ion-label color="danger">Stock Producto:</ion-label>
+          <ion-button color="primary" > <ion-icon :icon="playOutline" size="large" @click="btnVer()" > </ion-icon></ion-button>
+          <ion-button color="success" > <ion-icon :icon="syncOutline" size="large" @click="btnActualizar()" > </ion-icon></ion-button>
+          <ion-button color="danger"> <ion-icon :icon="closeCircleOutline" size="large" @click="btnBorrar()" > </ion-icon></ion-button>
         </ion-item>
-      </ion-item>
-      <ion-item  >
-        <tr>
-          <th> Id : </th>
-        </tr>
-        <tr v-for=" movil in moviles " :key="movil">  
-          <td>{{movil.id}}</td>
-        </tr>
-      </ion-item>
-      <ion-item  >
-        <tr>
-          <th> Provedor : </th>
-        </tr>
-        <tr v-for=" movil in moviles " :key="movil">  
-          <td>{{movil.provedor}}</td>
-        </tr>
-      </ion-item>
-      <ion-item  >
-        <tr>
-          <th> Categoria: </th>
-        </tr>
-        <tr v-for=" movil in moviles " :key="movil">  
-          <td>{{movil.categoria}}</td>
-        </tr>
-      </ion-item>
-      <ion-item  >
-        <tr>
-          <th> Stock:</th>
-        </tr>
-        <tr >  
-          <td>
-            
-          </td>
-        </tr>
-      </ion-item>
-      <ion-button color="primary" @click="btnActualizar(movil.id, movil.provedor, movil.categoria, movil.stock )" > <ion-icon :icon="syncOutline" size="large" > </ion-icon></ion-button>
-      <ion-button color="danger" @click="btnBorrar(movil.id)"> <ion-icon :icon="closeCircleOutline" size="large" > </ion-icon></ion-button>
+      </ion-list>
     </ion-content >
   </ion-page>
 </template>
@@ -84,12 +66,19 @@ import {
   menuController,
   IonLabel,
   IonButton,
+  IonIcon,
+  IonItemOptions,
+  IonItemOption,
+  IonRouterOutlet,
+  IonItemSliding 
 } from '@ionic/vue';
-import { defineComponent } from 'vue';
+
+import { defineComponent, reactive } from 'vue';
 import { handRightOutline,reorderThreeOutline} from 'ionicons/icons'
-import { App } from '../App.vue';
 import { useRouter } from 'vue-router';
-import { addCircleOutline,syncOutline, closeCircleOutline } from  'ionicons/icons'
+import { addCircleOutline,syncOutline,powerOutline, closeCircleOutline,playOutline  } from  'ionicons/icons'
+import ModalCrear from "../views/ModalCrear.vue"
+
 
 
 
@@ -106,39 +95,45 @@ export default defineComponent({
     IonToolbar,
     IonLabel,
     IonButton,
-    
+    IonIcon,
+    IonItemOptions,
+    IonItemOption,
+    IonRouterOutlet,
+    IonItemSliding,
+    ModalCrear 
+  },
+    setup (){ 
+      menuController.enable(true, 'first');
+      menuController.open('first');
+      const router = useRouter();
+      const modalInfo = reactive<{ show: boolean; data: any }>({
+        show:false,
+        data: null,
+    });
+    const showModal = () => {
+      modalInfo.show = true;
+    };
+    const handleModalClosed = (eventData: any) =>{
+      modalInfo.show= false;
+      alert(JSON.stringify(eventData));
+      modalInfo.data = eventData
 
-  },
-  data: () => ({
-    producto: "",
-    cproducto: "",
-    cateproducto:"",
-  }),
-  methods: {
-    login() {
-      console.log(this.producto);
-      console.log(this.cproducto);
-      console.log(this.cateproducto)
     }
-  },
-    setup (){
-    const  {Catproductos} = App ()
-    menuController.enable(true, 'first');
-    menuController.open('first');
-    const router = useRouter();
     return {
-      Catproductos,
+      showModal,
+      modalInfo,
       handRightOutline,
       menuController,
       reorderThreeOutline,
       router,
       addCircleOutline,
       syncOutline,
-      closeCircleOutline
-    }
-    
-    
-  }
-  
+      closeCircleOutline,
+      handleModalClosed,
+      playOutline ,
+      powerOutline
+    };
+  },
 });
 </script>
+
